@@ -36,7 +36,14 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/usr/local/go/bin:${PATH}"
+# Bashプロンプトの設定を追加
+RUN echo 'left_prompt() {' >> ~/.bashrc && \
+    echo '    local user="\[\033[0;32m\]\u🐎\[\033[0m\]"' >> ~/.bashrc && \
+    echo '    local dir="\[\033[0;93m\][\w]\[\033[0m\]"' >> ~/.bashrc && \
+    echo '    local next="\[\033[0;36m\]>\[\033[0m\] "' >> ~/.bashrc && \
+    echo '    echo -e "\n${user} ${dir}\n${next}"' >> ~/.bashrc && \
+    echo '}' >> ~/.bashrc && \
+    echo 'PS1="$(left_prompt)"' >> ~/.bashrc
 
 # 作業ディレクトリの設定
 WORKDIR /workspace
